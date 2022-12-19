@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <div th:include="fragments/components::header"></div>
+</head>
+
+<body>
+
+<div class="container mt-5">
+  <div class="shadow p-3 mb-5 bg-body rounded">
+    <form method="POST" class="form-signin" th:object="${userForm}" th:action="@{/seller_register}">
+
+      <h2 class="form-heading text-center">Create your account</h2>
+
+      <div class="form-group">
+        <!-- Username -->
+        <div class="form-floating mb-3">
+          <input id="usernameInput"
+                 name="username"
+                 type="text"
+                 class="form-control"
+                 placeholder="Username"
+                 th:field="*{username}"
+                 autofocus="true">
+          <label for="usernameInput">Username</label>
+          <span class="has-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-floating mb-3">
+          <input id="passwordInput"
+                 name="password"
+                 type="password"
+                 class="form-control"
+                 th:field="*{password}"
+                 placeholder="Password">
+          <label for="passwordInput">Password</label>
+          <span class="has-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <!--Password Confirm -->
+        <div class="form-floating mb-3">
+          <input id="confirmPassword"
+                 name="confirmPassword"
+                 type="password"
+                 class="form-control"
+                 th:field="*{passwordConfirm}"
+                 placeholder="Confirm your password">
+          <label for="confirmPassword">Confirm Password</label>
+          <span class="has-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input id="companyNameInput"
+                 name="companyName"
+                 type="text"
+                 class="form-control"
+                 placeholder="Company name"
+                 th:field="*{name}"
+                 autofocus="true">
+          <label for="companyNameInput">Company Name</label>
+          <span class="has-error" th:if="${#fields.hasErrors('name')}" th:errors="*{username}"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input id="address"
+                 name="address"
+                 type="text"
+                 class="form-control"
+                 placeholder="Address"
+                 th:field="*{address}"
+                 autofocus="true">
+          <label for="address">Address</label>
+          <span class="has-error" th:if="${#fields.hasErrors('address')}" th:errors="*{username}"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input id="code"
+                 name="code"
+                 type="text"
+                 class="form-control"
+                 placeholder="Code"
+                 th:field="*{code}"
+                 autofocus="true">
+          <label for="code">Code</label>
+          <span class="has-error" th:if="${#fields.hasErrors('code')}" th:errors="*{username}"></span>
+        </div>
+
+        <select th:field="*{type}">
+          <option th:value="'ROLE_WAREHOUSE'" th:text="Warehouse"/>
+          <option th:value="'ROLE_SHOP'" th:text="Shop"/>
+        </select>
+      </div>
+
+      <!-- Login/Register -->
+      <div class="text-center text-lg-start mt-4 pt-2">
+        <button class="btn btn-primary btn-lg"
+                style="padding-left: 2.5rem; padding-right: 2.5rem;"
+                type="submit">
+          Submit
+        </button>
+
+        <p class="small fw-bold mt-2 pt-1 mb-0">
+          <a href="/register" class="link-danger">Register as client</a>
+        </p>
+
+        <p class="small fw-bold mt-2 pt-1 mb-0">
+          <a href="/login" class="link-danger">Login</a>
+        </p>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div th:include="fragments/components::bootstrap_script"/>
+
+</body>
+</html>

@@ -6,7 +6,9 @@ import com.example.twplatformaecommerce.repo.RoleRepo;
 import com.example.twplatformaecommerce.repo.UserRepo;
 import com.example.twplatformaecommerce.security.SecurityConfig;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,10 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
-    public UserEntity saveUser(UserEntity user) {
+    public UserEntity save(UserEntity user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
@@ -64,6 +63,16 @@ public class UserService implements UserDetailsService {
         if(optUser.isPresent())
             return optUser.get();
         throw new UsernameNotFoundException(username);
+    }
+
+    public void login(String username, String password){
+        UserDetails userDetails = this.loadUserByUsername(username);
+
+        if(Objects.isNull(userDetails))
+            return;
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     public List<UserEntity> getUsers() {

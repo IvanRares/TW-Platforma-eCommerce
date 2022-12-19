@@ -40,28 +40,28 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserResource {
     private final UserService userService;
 
-    @GetMapping("/users")
-    public ResponseEntity<List<UserEntity>> getUsers() {
-        return ResponseEntity.ok().body(userService.getUsers());
-    }
-
-    @PostMapping("/user/save")
-    public ResponseEntity<UserEntity> saveUser(@RequestBody UserEntity user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
-    }
-
-    @PostMapping("/role/save")
-    public ResponseEntity<RoleEntity> saveRole(@RequestBody RoleEntity role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
-    }
-
-    @PostMapping("/role/addtouser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
-        return ResponseEntity.ok().build();
-    }
+//    @GetMapping("/users")
+//    public ResponseEntity<List<UserEntity>> getUsers() {
+//        return ResponseEntity.ok().body(userService.getUsers());
+//    }
+//
+//    @PostMapping("/user/save")
+//    public ResponseEntity<UserEntity> saveUser(@RequestBody UserEntity user) {
+//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+//        return ResponseEntity.created(uri).body(userService.save(user));
+//    }
+//
+//    @PostMapping("/role/save")
+//    public ResponseEntity<RoleEntity> saveRole(@RequestBody RoleEntity role) {
+//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
+//        return ResponseEntity.created(uri).body(userService.saveRole(role));
+//    }
+//
+//    @PostMapping("/role/addtouser")
+//    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
+//        userService.addRoleToUser(form.getUsername(), form.getRoleName());
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {

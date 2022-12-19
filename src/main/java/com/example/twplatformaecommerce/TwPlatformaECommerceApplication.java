@@ -24,14 +24,8 @@ public class TwPlatformaECommerceApplication {
 //            userService.saveRole(new RoleEntity(null,"ROLE_SHOP"));
 //            userService.saveRole(new RoleEntity(null,"ROLE_WAREHOUSE"));
 //            userService.saveRole(new RoleEntity(null,"ROLE_ADMIN"));
-//
-//            userService.saveUser(new UserEntity(null,"john@mail.com","1234",new ArrayList<>()));
-//            userService.saveUser(new UserEntity(null,"will@mail.com","1234",new ArrayList<>()));
-//            userService.saveUser(new UserEntity(null,"rares@mail.com","1234",new ArrayList<>()));
-//
-//            userService.addRoleToUser("john@mail.com","ROLE_USER");
-//            userService.addRoleToUser("will@mail.com","ROLE_WAREHOUSE");
-//            userService.addRoleToUser("rares@mail.com","ROLE_ADMIN");
+//            userService.save(new UserEntity(null,"admin","admin","admin",new ArrayList<>()));
+//            userService.addRoleToUser("admin","ROLE_ADMIN");
 //        };
 //    }
 }
