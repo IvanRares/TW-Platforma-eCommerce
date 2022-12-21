@@ -1,24 +1,26 @@
 package com.example.twplatformaecommerce.controller;
 
 import com.example.twplatformaecommerce.model.entity.FormEntity;
-import com.example.twplatformaecommerce.service.FormService;
-import com.example.twplatformaecommerce.service.FormValidatorService;
-import com.example.twplatformaecommerce.service.SecurityService;
-import com.example.twplatformaecommerce.service.SellerService;
+import com.example.twplatformaecommerce.model.entity.ProductEntity;
+import com.example.twplatformaecommerce.model.entity.UserEntity;
+import com.example.twplatformaecommerce.service.*;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -28,6 +30,8 @@ public class HomeController {
     private final SecurityService securityService;
     private final FormService formService;
     private final SellerService sellerService;
+    private final ProductService productService;
+    private List<ProductEntity> products;
 
     @GetMapping()
     public String open(Model model, String error, String logout, @CookieValue(value = AUTHORIZATION,defaultValue = "")String authorization){
@@ -54,5 +58,23 @@ public class HomeController {
     public String deleteAccount(Model model, String error, String logout, @PathVariable("username") String username){
         formService.deleteForm(username);
         return "redirect:/forms";
+    }
+
+    @GetMapping("/products")
+    public String getProducts(Model model, String error, String logout, Authentication authentication){
+        Collection<String> granted=authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        if(granted.stream().filter(e->e.contains("ROLE_WAREHOUSE")).findFirst().isPresent()){
+            products=productService.getProductsForWarehouse(authentication.getPrincipal().toString());
+            model.addAttribute("productList",products);
+            return "warehouse_inventory";
+        }
+        return "warehouse_inventory";
+    }
+
+    @GetMapping("/products/edit/{name}")
+    public String open(Model model, String error, String logout, @PathVariable("name") String name, final RedirectAttributes redirectAttributes){
+        ProductEntity product=products.stream().filter(x->x.getName().equals(name)).findFirst().orElse(null);
+        redirectAttributes.addFlashAttribute("currentProduct",product);
+        return "redirect:/newproduct";
     }
 }

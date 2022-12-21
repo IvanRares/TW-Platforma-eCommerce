@@ -45,6 +45,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .permitAll()
                 .antMatchers("/forms/**")
                 .authenticated()
+                .antMatchers("/newproduct/**")
+                .hasRole("WAREHOUSE")
                 .anyRequest()
                 .authenticated()
                 .and()

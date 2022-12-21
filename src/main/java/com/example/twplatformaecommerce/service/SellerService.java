@@ -29,7 +29,7 @@ public class SellerService {
         seller.setCode(form.getCode());
         seller.setName(form.getName());
         seller.setAddress(form.getAddress());
-        seller.setPassword(passwordEncoder.encode(form.getPassword()));
+        seller.setPassword(form.getPassword());
         addRoleToSeller(seller,form.getType());
         formRepo.deleteByUsername(form.getUsername());
         sellerRepo.save(seller);

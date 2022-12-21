@@ -4,9 +4,8 @@
 </head>
 <body>
 <nav th:replace="fragments/components::navbar"></nav>
-<table class="table table-hover">
+<table class="table table-hover text-center">
     <tr>
-        <th>#</th>
         <th>Email</th>
         <th>Name</th>
         <th>Address</th>
@@ -16,10 +15,9 @@
         <th>Delete</th>
     </tr>
     <tr th:if="${formList.isEmpty()}">
-        <td class="text-center" colspan="8">No forms found.</td>
+        <td class="text-center" colspan="7">No forms found.</td>
     </tr>
-    <tr th:each="form,iterator: ${formList}">
-        <td class="align-middle" th:text="${iterator.index+1}"></td>
+    <tr th:each="form: ${formList}">
         <td class="align-middle" th:text="${form.username}"></td>
         <td class="align-middle" th:text="${form.name}"></td>
         <td class="align-middle" th:text="${form.address}"></td>
