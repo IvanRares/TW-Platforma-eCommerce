@@ -25,9 +25,9 @@ public class LoginController {
     private final SecurityService securityService;
     @GetMapping()
     public String open(Model model, String error, String logout, @CookieValue(value = AUTHORIZATION,defaultValue = "")String authorization){
-        if (authorization!=null&&authorization.startsWith("Bearer_"))  {
-            return "redirect:/";
-        }
+//        if (authorization!=null&&authorization.startsWith("Bearer_"))  {
+//            return "redirect:/";
+//        }
 
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");

@@ -35,7 +35,6 @@ public class RegisterController {
             return "register";
 
         userService.save(userForm);
-        userService.login(userForm.getUsername(), userForm.getPassword());
-        return "index";
+        return "login";
     }
 }

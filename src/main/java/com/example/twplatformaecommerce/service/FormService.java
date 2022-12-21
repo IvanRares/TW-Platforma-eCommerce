@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,13 @@ public class FormService {
         if(optForm.isPresent())
             return optForm.get();
         throw new UsernameNotFoundException(username);
+    }
+
+    public List<FormEntity> getForms(){
+        return formRepo.findAll();
+    }
+
+    public void deleteForm(String username){
+        formRepo.deleteByUsername(username);
     }
 }
