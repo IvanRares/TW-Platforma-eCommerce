@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="fragments/components::header">
+</head>
+<body>
+<nav th:replace="fragments/components::navbar"></nav>
+<table class="table table-hover text-center">
+    <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Warehouse</th>
+    </tr>
+    <tr th:if="${productList.isEmpty()}">
+        <td class="text-center" colspan="3">No products found.</td>
+    </tr>
+    <tr th:each="product: ${productList}">
+        <td class="align-middle" th:text="${product.name}"></td>
+        <td class="align-middle" th:text="${product.quantity}"></td>
+        <td class="align-middle" th:text="${product.warehouseName}">
+        </td>
+    </tr>
+</table>
+</body>
+</html>

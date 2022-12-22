@@ -38,7 +38,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     SecurityFilterChain resources (HttpSecurity http) throws Exception {
         http.csrf().disable();
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .authorizeRequests()
                 .antMatchers("/login/**","/register/**","/seller_register/**","/")
@@ -47,6 +46,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authenticated()
                 .antMatchers("/newproduct/**")
                 .hasRole("WAREHOUSE")
+                .antMatchers("/storeorder/**")
+                .hasRole("SHOP")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -62,9 +63,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .and()
                 .addFilter(new CustomAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))))
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-  //              .addFilterBefore(new CustomAuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);
-//        http.authorizeRequests().anyRequest().authenticated();
-       // http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

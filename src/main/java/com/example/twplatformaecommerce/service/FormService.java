@@ -32,6 +32,13 @@ public class FormService {
         throw new UsernameNotFoundException(username);
     }
 
+    public FormEntity getFormByName(String name) {
+        Optional<FormEntity> optForm=formRepo.findByName(name);
+        if(optForm.isPresent())
+            return optForm.get();
+        throw new UsernameNotFoundException(name);
+    }
+
     public List<FormEntity> getForms(){
         return formRepo.findAll();
     }

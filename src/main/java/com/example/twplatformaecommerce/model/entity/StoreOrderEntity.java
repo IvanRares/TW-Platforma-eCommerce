@@ -10,18 +10,15 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormEntity{
+public class StoreOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(unique = true)
-    private String username;
-    private String password;
-    @Transient
-    private String passwordConfirm;
-    @Column(unique = true)
-    private String name;
-    private String address;
-    private String code;
-    private String type;
+    private String wantedQuantity;
+    @OneToOne
+    @JoinColumn(name = "productentity_id")
+    private ProductEntity product;
+    @OneToOne
+    @JoinColumn(name = "sellerentity_id")
+    private SellerEntity seller;
 }

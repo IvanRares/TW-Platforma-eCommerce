@@ -2,21 +2,14 @@ package com.example.twplatformaecommerce.controller;
 
 import com.example.twplatformaecommerce.model.entity.FormEntity;
 import com.example.twplatformaecommerce.model.entity.ProductEntity;
-import com.example.twplatformaecommerce.model.entity.UserEntity;
 import com.example.twplatformaecommerce.service.*;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.util.Collection;
 import java.util.List;
@@ -68,13 +61,29 @@ public class HomeController {
             model.addAttribute("productList",products);
             return "warehouse_inventory";
         }
-        return "warehouse_inventory";
+        products=productService.getProductsForStore(authentication.getPrincipal().toString());
+        model.addAttribute("productList",products);
+        return "shop_inventory";
     }
 
     @GetMapping("/products/edit/{name}")
-    public String open(Model model, String error, String logout, @PathVariable("name") String name, final RedirectAttributes redirectAttributes){
+    public String editProduct(Model model, String error, String logout, @PathVariable("name") String name, final RedirectAttributes redirectAttributes){
         ProductEntity product=products.stream().filter(x->x.getName().equals(name)).findFirst().orElse(null);
         redirectAttributes.addFlashAttribute("currentProduct",product);
         return "redirect:/newproduct";
+    }
+
+    @GetMapping("/buy")
+    public String getBuyableProducts(Model model, String error, String logout){
+        products=productService.getProductsFromAllWarehouses();
+        model.addAttribute("productList",products);
+        return "warehouse_buy";
+    }
+
+    @GetMapping("/buy/{index}")
+    public String buyProduct(Model model, String error, String logout,@PathVariable("index") int index,final RedirectAttributes redirectAttributes){
+        ProductEntity product=products.get(index);
+        redirectAttributes.addFlashAttribute("currentProduct",product);
+        return "redirect:/storeorder";
     }
 }

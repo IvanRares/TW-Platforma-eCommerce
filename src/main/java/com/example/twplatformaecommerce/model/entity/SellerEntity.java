@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -13,6 +14,7 @@ import javax.persistence.InheritanceType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SellerEntity extends UserEntity {
+    @Column(unique = true)
     private String name;
     private String address;
     private String code;

@@ -34,7 +34,7 @@ public class ProductValidatorService implements Validator {
     public void validate(Object productEntity, Errors errors,boolean isEditing) {
         ProductEntity product = (ProductEntity) productEntity;
         ProductEntity productExists=productService.getProductByNameAndWarehouseName(product.getName(),product.getWarehouseName());
-        if(!isEditing||productExists!=null)
+        if(!isEditing&&productExists!=null)
             errors.rejectValue("name","product.Exists");
         validate(productEntity,errors);
     }

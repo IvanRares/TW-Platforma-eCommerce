@@ -13,6 +13,8 @@ import org.springframework.validation.Validator;
 @RequiredArgsConstructor
 public class FormValidatorService implements Validator {
     private final FormService formService;
+    private final SellerService sellerService;
+
     @Override
     public boolean supports(Class<?> aClass) {
         return FormEntity.class.equals(aClass);
@@ -40,22 +42,36 @@ public class FormValidatorService implements Validator {
            at least one special character (?=.*[@#$%^&+=])
            No space [^\s]
         */
-        try{
+        try {
             formService.getForm(user.getUsername());
-
-            errors.rejectValue("username","user.Exists");
-        }catch (UsernameNotFoundException ex){
+            errors.rejectValue("username", "user.Exists");
+        } catch (UsernameNotFoundException ex) {
+        }
+        try {
+            formService.getFormByName(user.getName());
+            errors.rejectValue("name", "user.Exists");
+        } catch (UsernameNotFoundException ex) {
         }
 
+        try {
+            sellerService.getSeller(user.getUsername());
+            errors.rejectValue("username", "user.Exists");
+        } catch (UsernameNotFoundException ex) {
+        }
+        try {
+            sellerService.getSellerByName(user.getName());
+            errors.rejectValue("name", "user.Exists");
+        } catch (UsernameNotFoundException ex) {
+        }
         String passwordRegexPattern = "^(?:(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*)[^\s]{8,}$";
-        Boolean isValidEmail =  user.getUsername().matches(emailRegexPattern);
+        Boolean isValidEmail = user.getUsername().matches(emailRegexPattern);
         Boolean isValidPassword = user.getPassword().matches(passwordRegexPattern);
         Boolean arePasswordTheSame = user.getPassword().equals(user.getPasswordConfirm());
-        if(!isValidEmail)
+        if (!isValidEmail)
             errors.rejectValue("username", "user.isValidEmail");
-        if(!isValidPassword)
+        if (!isValidPassword)
             errors.rejectValue("password", "user.isValidPassword");
-        if(!arePasswordTheSame)
+        if (!arePasswordTheSame)
             errors.rejectValue("passwordConfirm", "user.isPasswordTheSame");
 
     }
