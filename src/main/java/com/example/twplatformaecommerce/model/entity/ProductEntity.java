@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints={
-        @UniqueConstraint(columnNames = {"name", "warehouseName"})
+        @UniqueConstraint(columnNames = {"name", "warehouseName","storeName"})
 })
 public class ProductEntity {
     @Id

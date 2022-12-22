@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepo extends JpaRepository<ProductEntity,Long> {
-    List<ProductEntity> findAllByWarehouseName(String warehouseName);
+    List<ProductEntity> findAllByWarehouseNameAndStoreNameIsNull(String warehouseName);
     List<ProductEntity> findAllByStoreName(String storeName);
     List<ProductEntity> findAllByStoreNameIsNull();
     Optional<ProductEntity> findProductEntityByNameAndWarehouseName(String name, String warehouseName);
+    Optional<ProductEntity> findByNameAndWarehouseNameAndStoreName(String name,String warehouseName,String storeName);
 }
