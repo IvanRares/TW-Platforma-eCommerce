@@ -8,9 +8,15 @@ import com.example.twplatformaecommerce.repo.ProductRepo;
 import com.example.twplatformaecommerce.repo.SellerRepo;
 import com.example.twplatformaecommerce.repo.StoreOrderRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +43,7 @@ public class ProductService {
     }
 
     public ProductEntity getProductByNameAndWarehouseName(String name, String warehouseName) {
-        Optional<ProductEntity> optProduct = productRepo.findByNameAndWarehouseNameAndStoreName(name, warehouseName,null);
+        Optional<ProductEntity> optProduct = productRepo.findByNameAndWarehouseNameAndStoreName(name, warehouseName, null);
         if (optProduct.isPresent())
             return optProduct.get();
         return null;
@@ -73,5 +79,32 @@ public class ProductService {
 
         storeOrderRepo.delete(storeOrder);
         return true;
+    }
+
+    public Page<ProductEntity> findPaginated(Pageable pageable, List<String> filters, String keyword) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        long size = 0;
+        List<ProductEntity> products = new ArrayList<>();
+        if (filters.size() == 0) {
+            if (keyword == null) {
+                products = productRepo.findAllByStoreNameIsNotNull(PageRequest.of(currentPage, pageSize));
+                size = productRepo.countByStoreNameIsNotNull();
+            }
+            else{
+                products=productRepo.findAllByStoreNameIsNotNullAndNameContaining(keyword,PageRequest.of(currentPage,pageSize));
+                size=productRepo.countByStoreNameIsNotNullAndNameContaining(keyword);
+            }
+        } else {
+            if (keyword == null) {
+                products = productRepo.findAllByStoreNameIn(filters, PageRequest.of(currentPage, pageSize));
+                size = productRepo.countByStoreNameIn(filters);
+            }
+            else{
+                products=productRepo.findAllByStoreNameInAndNameContaining(filters,keyword,PageRequest.of(currentPage,pageSize));
+                size=productRepo.countByStoreNameInAndNameContaining(filters,keyword);
+            }
+        }
+        return new PageImpl<>(products, PageRequest.of(currentPage, pageSize), size);
     }
 }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="fragments/components::header">
+</head>
+<body>
+<nav th:replace="fragments/components::navbar"></nav>
+<form class="d-flex" th:action="@{/search}" method="post">
+    <input class="form-control me-2" type="search"  name="keyword" th:value="${keyword}" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+<div class="d-flex mt-5 flex-row">
+    <div class="p-2">
+        <form th:action="@{/search}" method="post">
+                    <div th:each="store : ${searchTypes}">
+                        <input type="checkbox" name="searchValues" class="form-check-input" th:value="${store.name}" th:checked="${filters.contains(store.name)}"/>
+                        <label  class="form-check-label" th:text="${store.name}"></label>
+                    </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+
+        </form>
+    </div>
+    <div class="flex-fill p-2">
+        <table class="table table-hover text-center">
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Shop</th>
+                <th>Warehouse</th>
+                <th>Buy</th>
+            </tr>
+            <tr th:if="${productPage.content.isEmpty()}">
+                <td class="text-center" colspan="4">No orders found.</td>
+            </tr>
+            <tr th:each="product,iter: ${productPage.content}">
+                <td class="align-middle" th:text="${product.name}"></td>
+                <td class="align-middle" th:text="${product.quantity}"></td>
+                <td class="align-middle" th:text="${product.storeName}"></td>
+                <td class="align-middle" th:text="${product.warehouseName}"></td>
+                <td class="align-middle" >
+                    <a class="btn btn-outline-success" id="productIndex" th:href="@{'/search/buy/' + ${iter.index}}" th:classappend="${product.quantity=='0'}? disabled : ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                            <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<nav th:if="${productPage.totalPages > 0}" th:fragment="pagination">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:each="pageNumber: ${pageNumbers}">
+            <a class="page-link" th:href="@{/search(size=${productPage.size}, page=${pageNumber})}"
+               th:text="${pageNumber}">
+            </a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

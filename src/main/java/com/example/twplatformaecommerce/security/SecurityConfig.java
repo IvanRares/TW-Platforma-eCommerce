@@ -26,7 +26,7 @@ import static org.springframework.http.HttpMethod.POST;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig {
     private static final String[] METHODS_ALLOWED = {
             GET.name(),
             HttpMethod.POST.name(),
@@ -36,20 +36,14 @@ public class SecurityConfig implements WebMvcConfigurer {
     };
 
     @Bean
-    SecurityFilterChain resources (HttpSecurity http) throws Exception {
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http
-                .authorizeRequests()
-                .antMatchers("/login/**","/register/**","/seller_register/**","/")
-                .permitAll()
-                .antMatchers("/forms/**")
-                .authenticated()
-                .antMatchers("/newproduct/**")
-                .hasRole("WAREHOUSE")
-                .antMatchers("/storeorder/**")
-                .hasRole("SHOP")
-                .anyRequest()
-                .authenticated()
+        http.authorizeRequests().antMatchers("/register/**", "/seller_register/**").permitAll()
+                .antMatchers(GET, "/forms/**").hasRole("ADMIN")
+                .antMatchers(GET,"/products/**").hasAnyRole("WAREHOUSE","SHOP","USER")
+                .antMatchers("/newproduct/**","/orders/**").hasRole("WAREHOUSE")
+                .antMatchers("/storeorder/**","/buy/**").hasRole("SHOP")
+                .antMatchers("/userorder/**","/search/**").hasRole("USER")
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -71,12 +65,12 @@ public class SecurityConfig implements WebMvcConfigurer {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedMethods(METHODS_ALLOWED)
-                .allowedOrigins("*");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedMethods(METHODS_ALLOWED)
+//                .allowedOrigins("*");
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

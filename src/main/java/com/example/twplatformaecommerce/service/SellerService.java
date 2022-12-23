@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,5 +57,10 @@ public class SellerService {
         if(optSeller.isPresent())
             return optSeller.get();
         throw new UsernameNotFoundException(name);
+    }
+
+    public List<SellerEntity> getAllStores(){
+        RoleEntity store=roleRepo.findByName("ROLE_SHOP");
+        return sellerRepo.findAllByRoles_(store);
     }
 }

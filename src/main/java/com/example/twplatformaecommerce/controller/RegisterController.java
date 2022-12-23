@@ -35,6 +35,7 @@ public class RegisterController {
             return "register";
 
         userService.save(userForm);
+        userService.addRoleToUser(userForm.getUsername(),"ROLE_USER");
         return "login";
     }
 }

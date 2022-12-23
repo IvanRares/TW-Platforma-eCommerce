@@ -34,11 +34,14 @@
                 <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" href="#" th:href="@{/forms}">Forms</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyRole('ROLE_WAREHOUSE','ROLE_SHOP')">
+                <li class="nav-item" sec:authorize="hasAnyRole('ROLE_WAREHOUSE','ROLE_SHOP','ROLE_USER')">
                     <a class="nav-link" href="#" th:href="@{/products}">Products</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyRole('ROLE_SHOP','ROLE_USER')">
+                <li class="nav-item" sec:authorize="hasAnyRole('ROLE_SHOP')">
                     <a class="nav-link" href="#" th:href="@{/buy}">Buy</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyRole('ROLE_USER')">
+                    <a class="nav-link" href="#" th:href="@{/search}">Search</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyRole('ROLE_WAREHOUSE')">
                     <a class="nav-link" href="#" th:href="@{/orders}">View Orders</a>
